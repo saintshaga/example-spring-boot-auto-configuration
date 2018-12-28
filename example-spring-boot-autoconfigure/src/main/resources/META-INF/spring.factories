@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.saintshaga.autoconfigure.DBTextServiceAutoConfiguration,\
+  cn.saintshaga.autoconfigure.EhCacheTextCacheAutoConfiguration
