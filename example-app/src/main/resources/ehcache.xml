@@ -29,8 +29,9 @@
             </listener>
         </listeners>
         <resources>
-            <heap unit="entries">3</heap>
-            <disk persistent="true" unit="kB">100</disk>
+            <heap unit="entries">1000</heap>
+            <offheap unit="MB">5</offheap>
+            <disk persistent="true" unit="MB">50</disk>
         </resources>
     </cache-template>
 </config>
