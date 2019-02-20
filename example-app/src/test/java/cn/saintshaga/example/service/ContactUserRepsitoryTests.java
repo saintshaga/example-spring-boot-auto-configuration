@@ -1,5 +1,6 @@
 package cn.saintshaga.example.service;
 
+import cn.saintshaga.example.entity.IUser;
 import cn.saintshaga.example.entity.User;
 import com.google.common.collect.Lists;
 import org.junit.After;
@@ -63,7 +64,7 @@ public class ContactUserRepsitoryTests {
         userRepository.getUser(userId1);
         assertTrue(cache.containsKey(userId1));
         assertFalse(cache.containsKey(userId2));
-        Map<String, User> results = userRepository.getUsers(Lists.newArrayList(userId1, userId2, null));
+        Map<String, IUser> results = userRepository.getUsers(Lists.newArrayList(userId1, userId2, null));
         assertTrue(cache.containsKey(userId1));
         assertTrue(cache.containsKey(userId2));
         assertEquals(2, results.size());

@@ -1,11 +1,13 @@
 package cn.saintshaga.example.service;
 
+import cn.saintshaga.example.entity.IUser;
 import cn.saintshaga.example.entity.User;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PreDestroy;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.annotation.CacheResult;
@@ -26,7 +28,7 @@ public class ContactUserRepository implements UserRepository {
 
     @CacheResult(cacheName = CONTACT_USER_CACHE_NAME)
     @Override
-    public User getUser(@NonNull String userId) {
+    public IUser getUser(@NonNull String userId) {
         return User.builder()
                 .name(userId + "name")
                 .userId(userId)
@@ -34,15 +36,15 @@ public class ContactUserRepository implements UserRepository {
     }
 
     @Override
-    public Map<String, User> getUsers(List<String> userIds) {
+    public Map<String, IUser> getUsers(List<String> userIds) {
         if(CollectionUtils.isEmpty(userIds)) {
             return Collections.emptyMap();
         }
-        final Cache<String, User> cache = cacheManager.getCache(CONTACT_USER_CACHE_NAME);
+        final Cache<String, IUser> cache = cacheManager.getCache(CONTACT_USER_CACHE_NAME);
         List<String> uncachedUserIds = userIds.stream().filter(Objects::nonNull)
                 .filter(userId -> !cache.containsKey(userId))
                 .collect(Collectors.toList());
-        Map<String, User> uncachedUsers = getUsersNative(uncachedUserIds).stream().collect(Collectors.toMap(User::getUserId, Function.identity()));
+        Map<String, IUser> uncachedUsers = getUsersNative(uncachedUserIds).stream().collect(Collectors.toMap(User::getUserId, Function.identity()));
         cache.putAll(uncachedUsers);
         return cache.getAll(userIds.stream().filter(Objects::nonNull).collect(Collectors.toSet()));
     }
@@ -56,5 +58,10 @@ public class ContactUserRepository implements UserRepository {
                         .name(userId+"name")
                         .userId(userId).build())
                 .collect(Collectors.toList());
+    }
+
+    @PreDestroy
+    public void closeCacheManager() {
+        cacheManager.close();
     }
 }

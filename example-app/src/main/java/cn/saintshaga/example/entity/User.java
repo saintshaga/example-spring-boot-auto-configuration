@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Builder
-public class User implements Serializable {
+public class User implements IUser, Serializable {
 
     private String userId;
     private String name;

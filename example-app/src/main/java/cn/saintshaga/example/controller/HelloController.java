@@ -1,6 +1,6 @@
 package cn.saintshaga.example.controller;
 
-import cn.saintshaga.example.entity.User;
+import cn.saintshaga.example.entity.IUser;
 import cn.saintshaga.example.service.UserRepository;
 import cn.saintshaga.text.service.TextService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class HelloController {
 
     @RequestMapping("user")
     @ResponseBody
-    public User getUser(@RequestParam String userId) {
+    public IUser getUser(@RequestParam String userId) {
         return userRepository.getUser(userId);
     }
 }
