@@ -8,18 +8,47 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.jcache.JCacheCacheManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
+import javax.cache.Caching;
+import javax.cache.spi.CachingProvider;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ContactUserRepsitoryTests {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+public class ContactUserRepositoryTests {
+    @Configuration
+    @EnableCaching
+    static class UserRepositoryTestConfiguration {
+        @Bean
+        public UserRepository userRepository() {
+            return new ContactUserRepository();
+        }
+
+
+        @Bean
+        public CacheManager cacheManager() throws URISyntaxException {
+            CachingProvider cachingProvider = Caching.getCachingProvider();
+             return cachingProvider.getCacheManager(
+                     getClass().getClassLoader().getResource("ehcache.xml").toURI(),
+                     getClass().getClassLoader());
+        }
+
+        @Bean
+        public JCacheCacheManager ehCacheCacheManager(CacheManager cacheManager) {
+            return new JCacheCacheManager(cacheManager);
+        }
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -74,4 +103,5 @@ public class ContactUserRepsitoryTests {
     public void returnEmpty_whenInputNull() {
         assertTrue(userRepository.getUsers(null).isEmpty());
     }
+
 }
