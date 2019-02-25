@@ -14,7 +14,6 @@
     <module>text-service</module>
     <module>text-cache</module>
     <module>example-spring-boot-autoconfigure</module>
-    <module>example-spring-boot-starter</module>
     <module>example-app</module>
   </modules>
 
