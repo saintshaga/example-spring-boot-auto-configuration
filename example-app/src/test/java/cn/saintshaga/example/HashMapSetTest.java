@@ -9,9 +9,6 @@ import java.util.Set;
 
 import static junit.framework.Assert.assertNull;
 
-/**
- * Created by huang on 19-3-28.
- */
 public class HashMapSetTest {
 
     @Test

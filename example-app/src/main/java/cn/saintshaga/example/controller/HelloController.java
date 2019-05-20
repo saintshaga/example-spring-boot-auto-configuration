@@ -17,5 +17,5 @@ public class HelloController {
     @RequestMapping("text")
     public String text() {
         return service.name();
-    }
+     }
 }
