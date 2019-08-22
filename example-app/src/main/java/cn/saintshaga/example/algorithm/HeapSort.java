@@ -1,6 +1,8 @@
 package cn.saintshaga.example.algorithm;
 
-import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class HeapSort {
     public void heapSort(int[] nums) {
@@ -81,14 +83,54 @@ public class HeapSort {
 //            }
 //            System.out.println(heapSort.maxPoints(cards, m));
 //        }
-        System.out.println(heapSort.maxPoints(new int[]{3, -4, 1, 1, 7}, 2));
+//        System.out.println(heapSort.maxPoints(new int[]{3, -4, 1, 1, 7}, 2));
+//
+//        System.out.println(heapSort.longestNumber("abcd12345ed125ss123456789aa123456"));
+//        PriorityQueue<Integer> queue = new PriorityQueue<>((a1, a2)-> a2-a1);
+//        queue.add(1);
+//        queue.add(2);
+//        queue.add(0);
+//        System.out.println(queue.peek());
+//        System.out.println(heapSort.findDivider(new int[]{3,8,6,2,7,9}));
+        System.out.println(heapSort.jump(new int[]{2,3,1,1,4}));
+    }
+    public int jump(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        IntStream.of(3).forEach(i -> list.add(3));
+        if(nums == null || nums.length <= 1) {
+            return 0;
+        }
+        int[] steps = new int[nums.length];
+        steps[0] = 0;
+        for(int i=0; i<nums.length; i++) {
+            if(i+nums[i] > nums.length) {
+                return steps[i] + 1;
+            }
+            for(int j=i+nums[i]; (j>i && steps[j] == 0); j--) {
+                steps[j] = steps[i] + 1;
+            }
+        }
+        return steps[nums.length-1];
+    }
 
-        System.out.println(heapSort.longestNumber("abcd12345ed125ss123456789aa123456"));
-        PriorityQueue<Integer> queue = new PriorityQueue<>((a1, a2)-> a2-a1);
-        queue.add(1);
-        queue.add(2);
-        queue.add(0);
-        System.out.println(queue.peek());
+
+    public int findDivider(int[] nums) {
+        if(nums == null || nums.length < 3) {
+            return -1;
+        }
+        int divider = 1;
+        int n=nums.length;
+        for(int i=0; i<divider; i++) {
+            for(int j=divider+1; j<n; j++) {
+                if(nums[i] > nums[j]) {
+                    divider = j;
+                }
+            }
+            if(divider == n-1) {
+                break;
+            }
+        }
+        return divider == n-1 ? -1 : divider;
     }
 
     public String longestNumber(String s) {
